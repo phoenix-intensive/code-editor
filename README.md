@@ -1,27 +1,156 @@
-# CodeEditorApp
+# Онлайн Редактор Кода
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.13.
+Этот проект представляет собой онлайн редактор кода, где пользователь может писать код на одном из двух языков программирования (Python и Go), отправлять его на "сервер" для выполнения и получать результаты.
 
-## Development server
+## Инструкция по запуску
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1. Клонируйте репозиторий:
 
-## Code scaffolding
+    ```bash
+    git clone https://github.com/phoenix-intensive/code-editor.git
+    ```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+2. Установите зависимости:
 
-## Build
+    ```bash
+    npm install
+    ```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+3. Запустите приложение:
 
-## Running unit tests
+    ```bash
+    ng serve --open
+    ```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+    Приложение будет доступно на [http://localhost:4200](http://localhost:4200).
 
-## Running end-to-end tests
+## Структура проекта
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Проект состоит из нескольких папок, каждая из которых выполняет свою задачу:
 
-## Further help
+### `src/`
+Основная папка с исходным кодом приложения.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **`app/`** - содержит бизнес-логику приложения, компоненты и сервисы.
+  - **`views/`** - папка с компонентами, которые отвечают за представление.
+    - **`code-editor/`** - компонент для редактора кода.
+      - `code-editor.component.ts` — TypeScript файл с логикой компонента.
+      - `code-editor.component.html` — HTML шаблон компонента.
+      - `code-editor.component.css` — Стили компонента.
+  - **`shared/`** - папка для сервисов и других переиспользуемых элементов.
+    - **`services/`** - сервисы, которые используются по всему приложению.
+      - `server.service.ts` — сервис для обработки выполнения кода.
+
+- **`assets/`** - папка для хранения статичных ресурсов, таких как изображения, шрифты и другие файлы.
+  
+- **`environments/`** - папка для хранения конфигураций для различных окружений (например, для разработки и продакшн).
+
+- **`index.html`** - основной HTML файл, который загружает приложение.
+
+## Используемые технологии
+
+- **Angular** — фреймворк для разработки приложения.
+- **CodeMirror** — библиотека для подсветки синтаксиса и работы с редактором кода.
+- **RxJS** — библиотека для работы с асинхронным кодом, используется для имитации задержки и обработки запросов.
+- **CSS** (SCSS) — стилизация приложения, включая медиазапросы для адаптивности.
+
+## Функциональность
+
+1. **Редактор кода**:
+    - Используется библиотека CodeMirror для подсветки синтаксиса и удобного редактирования кода.
+    - Поддержка двух языков программирования: Python и Go.
+    - Возможность переключения языка с помощью выпадающего списка.
+
+2. **Запуск кода**:
+    - При нажатии кнопки "Run" код отправляется на сервер, а результаты выполнения отображаются ниже редактора.
+    - В зависимости от кода, результаты могут быть успешными или содержать ошибку.
+
+3. **Моковая серверная логика**:
+    - Для имитации работы с сервером используется сервис `ServerService`, который с помощью метода `delay` из RxJS добавляет задержку и возвращает ответ в формате JSON (успех или ошибка).
+
+4. **Пример успешного и неуспешного кода**:
+    - **Python (ошибка)**:
+      ```python
+      def subtract(a, b):
+          return a - b
+      ```
+
+    - **Go (ошибка)**:
+      ```go
+      package main
+      
+      func subtract(a int, b int) int {
+          return a - b
+      }
+      
+      func main() {
+          result := subtract(10, 5)
+      }
+      ```
+
+    - **Python (валидный код)**:
+      ```python
+      def add(a, b):
+          print(a + b)
+      ```
+
+    - **Go (валидный код)**:
+      ```go
+      package main
+      
+      func add(a int, b int) {
+          fmt.Println(a + b)
+      }
+      
+      func main() {
+          add(10, 5)
+      }
+      ```
+
+## Как это проверить
+
+1. **Для ошибки**:
+    - Если код не содержит нужных строк, то это попадет в ветку ошибки.
+    - Пример кода, который вызовет ошибку:
+
+      - **Python (ошибка)**:
+        ```python
+        def subtract(a, b):
+            return a - b
+        ```
+
+      - **Go (ошибка)**:
+        ```go
+        package main
+        
+        func subtract(a int, b int) int {
+            return a - b
+        }
+        
+        func main() {
+            result := subtract(10, 5)
+        }
+        ```
+
+2. **Для успеха**:
+    - Если код содержит строки `def add` и `print` (для Python) или `func add` и `fmt.Println` (для Go), то будет вызвана ветка успеха.
+    - Пример валидного кода:
+
+      - **Python (валидный код)**:
+        ```python
+        def add(a, b):
+            print(a + b)
+        ```
+
+      - **Go (валидный код)**:
+        ```go
+        package main
+        
+        func add(a int, b int) {
+            fmt.Println(a + b)
+        }
+        
+        func main() {
+            add(10, 5)
+        }
+        ```
