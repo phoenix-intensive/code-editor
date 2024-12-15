@@ -92,6 +92,7 @@
       ```python
       def add(a, b):
           print(a + b)
+      add(7, 8)
       ```
 
     - **Go (валидный код)**:
@@ -140,6 +141,7 @@
         ```python
         def add(a, b):
             print(a + b)
+        add(7, 8)
         ```
 
       - **Go (валидный код)**:
