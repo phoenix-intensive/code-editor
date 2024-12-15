@@ -10,7 +10,7 @@
 
   <div class="language-selection">
     <label for="language-select">Выберите язык:</label>
-    <select id="language-select" (change)="switchLanguage($event)" [value]="selectedLanguage">
+    <select id="language-select" (change)="switchLanguage($event)" [value]="selectedLanguage.type">
       <option value="python">Python</option>
       <option value="go">Go</option>
     </select>

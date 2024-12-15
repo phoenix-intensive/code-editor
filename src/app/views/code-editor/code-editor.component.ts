@@ -3,7 +3,8 @@ import * as CodeMirror from 'codemirror';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/go/go';
 import {ServerService} from "../../shared/services/server.service";
-import {Language} from "../../../../type/language.type";
+import {Language} from "../../../../interface/language.interface";
+
 
 @Component({
   selector: 'code-editor',
@@ -12,7 +13,7 @@ import {Language} from "../../../../type/language.type";
 })
 export class CodeEditorComponent implements OnInit {
   editor: any;
-  selectedLanguage: Language = 'python'
+  selectedLanguage: Language = {type: 'python'};
   result: string | null = null;
   error: string | null = null;
   isLoading: boolean = false;
@@ -24,27 +25,26 @@ export class CodeEditorComponent implements OnInit {
     const textareaElement: HTMLTextAreaElement = document.getElementById('code-editor') as HTMLTextAreaElement;
     // Инициализация CodeMirror
     this.editor = CodeMirror.fromTextArea(textareaElement, {
-      mode: this.selectedLanguage,    // Устанавливаем язык
-      lineNumbers: true,              // Включаем отображение номеров строк
-      lineWrapping: true,             // Автоперенос строк
-      theme: 'default',               // Тема для редактора
+      mode: this.selectedLanguage.type, // Используем поле 'type' объекта Language
+      lineNumbers: true,               // Включаем отображение номеров строк
+      lineWrapping: true,              // Автоперенос строк
+      theme: 'default',                // Тема для редактора
     });
 
     // Устанавливаем начальное значение для редактора
-    this.editor.setValue(this.selectedLanguage === 'python' ? '# Write your Python code here' : '// Write your Go code here');
+    this.editor.setValue(this.selectedLanguage.type === 'python' ? '# Write your Python code here' : '// Write your Go code here');
   }
 
   switchLanguage(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     if (selectElement) {
-      this.selectedLanguage = selectElement.value as Language; // Использование value для выбора языка
-      this.editor.setOption('mode', this.selectedLanguage);   // Меняем режим в CodeMirror
-      this.editor.setValue(this.selectedLanguage === 'python' ? '# Write your Python code here' : '// Write your Go code here');
+      this.selectedLanguage = {type: selectElement.value as 'python' | 'go'};
+      this.editor.setOption('mode', this.selectedLanguage.type);   // Меняем режим в CodeMirror
+      this.editor.setValue(this.selectedLanguage.type === 'python' ? '# Write your Python code here' : '// Write your Go code here');
       this.result = null;
       this.error = null;
     }
   }
-
 
   runCode(): void {
     const code = this.editor.getValue();
@@ -54,14 +54,14 @@ export class CodeEditorComponent implements OnInit {
 
     this.serverService.executeCode(this.selectedLanguage, code)
       .subscribe({
-      next: (response) => {
-        this.result = response.output;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.result = err.message;
-        this.isLoading = false;
-      },
-    });
+        next: (response) => {
+          this.result = response.output ?? null;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.result = err.message;
+          this.isLoading = false;
+        },
+      });
   }
 }
