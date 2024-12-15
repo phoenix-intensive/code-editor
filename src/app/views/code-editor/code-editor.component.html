@@ -1,0 +1,36 @@
+<div class="container">
+  <h1 class="page-title">Online code editor</h1>
+
+  <div class="task-description">
+    <h2>Задача:</h2>
+    <p>
+      Напишите функцию, которая возвращает число 15
+    </p>
+  </div>
+
+  <div class="language-selection">
+    <label for="language-select">Выберите язык:</label>
+    <select id="language-select" (change)="switchLanguage($event)" [value]="selectedLanguage">
+      <option value="python">Python</option>
+      <option value="go">Go</option>
+    </select>
+  </div>
+
+  <div class="code-editor">
+    <textarea id="code-editor"></textarea>
+  </div>
+
+  <div class="run-button">
+    <button (click)="runCode()" [disabled]="isLoading">Запустить код</button>
+  </div>
+
+  <div class="result-output">
+    <h3>Результат выполнения:</h3>
+    <pre>{{ result }}</pre>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <p>Выполнение кода...</p>
+  </div>
+</div>
+

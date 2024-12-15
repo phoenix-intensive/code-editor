@@ -28,9 +28,15 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/codemirror/lib/codemirror.css",
+              "node_modules/codemirror/theme/dracula.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/codemirror/lib/codemirror.js",
+              "node_modules/codemirror/mode/python/python.js",
+              "node_modules/codemirror/mode/go/go.js"
+            ]
           },
           "configurations": {
             "production": {
